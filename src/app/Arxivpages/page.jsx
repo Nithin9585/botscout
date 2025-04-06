@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-
+import { Button } from '@/components/ui/button';
 function Arxivpages() {
   const [arxivData, setArxivData] = useState([]);
   const [error, setError] = useState(null);
@@ -13,9 +13,9 @@ function Arxivpages() {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
-        setArxivData(data); // Store the fetched data
+        setArxivData(data);
       } catch (error) {
-        setError(error.message); // Handle any errors
+        setError(error.message); 
       }
     };
 
@@ -29,14 +29,17 @@ function Arxivpages() {
       {arxivData.length > 0 ? (
         <div>
           {arxivData.map((entry, index) => (
-            <div key={index} className="arxiv-entry">
-              <h2>
+            <div key={index} className="arxiv-entry m-4 border-2 p-4 rounded-lg shadow-md">
+              <h2 className='text-2xl font-bold m-2'>
                 <a href={entry.id} target="_blank" rel="noopener noreferrer">
                   {entry.title}
                 </a>
               </h2>
-              <p>{entry.summary}</p>
-              <p>Published on: {entry.published}</p>
+              <p className='p-5 border-2 rounded-lg '>{entry.summary}</p>
+              <p className=' m-4'>Published on: {entry.published}</p>
+              <Button className='m-4' variant="outline">Download</Button>
+              <Button className='m-4' variant="outline">Download</Button>
+
             </div>
           ))}
         </div>
