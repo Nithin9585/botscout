@@ -24,7 +24,7 @@ export default function SummaryPage() {
         setRepo(selectedRepo);
 
         // Prepare prompt for DeepSeek
-        const prompt = `Give a short summary for this GitHub repository:\nName: ${selectedRepo.name}\nDescription: ${selectedRepo.description || 'No description'}\nLanguage: ${selectedRepo.language}`;
+        const prompt = `Give a short summary for this GitHub repository:\nName: ${selectedRepo.name}\nDescription: ${selectedRepo.description || 'No description'}\nLanguage: ${selectedRepo.language} dont add formatting`;
 
         // Call your custom /api/summarize route
         const summaryRes = await fetch('/api/summarize', {

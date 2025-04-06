@@ -27,13 +27,13 @@ export default function huggingfacepages() {
         <Button className="m-4 cursor-pointer">
           Arxiv Pages
         </Button>
-      </Link>
+      </Link>    
       <Link href="/huggingfacepages">
-        <Button className="m-4 cursor-pointer">
-          hugging facepages
+      <Button className="m-4 cursor-pointer">
+      hugging facepages
         </Button>
-      </Link>
-      <Link href="/githubpages">
+     </Link>
+     <Link href="/githubpages">
         <Button className="m-4 cursor-pointer">
           github pages
         </Button>
@@ -56,6 +56,6 @@ export default function huggingfacepages() {
         })}
 
       </main>
-    </div>
+ </div>
   );
 }
