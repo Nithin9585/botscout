@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { auth, firestore } from '../../firebase/firebase';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
-
+import Link from 'next/link';
 function Subscribers() {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -55,7 +55,15 @@ function Subscribers() {
 
   return (
     <div>
-      <Button onClick={handleSubscribe} disabled={isSubscribed}>
+      <a href='/signup' className='m-2 text-white p-2 rounded-md bg-blue-400'>
+      Register
+      </a>
+      <a href='/Login' className='m-2 text-white p-2 rounded-md bg-blue-400'>
+
+  Login
+      </a>
+
+      <Button onClick={handleSubscribe} className='m-2' disabled={isSubscribed}>
         {isSubscribed ? 'Subscribed' : 'Subscribe'}
       </Button>
     </div>

@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar"; 
-import Navbar from "@/components/Navbar";
 import { Toaster } from "sonner";
 import Subscribers from "@/components/Subsribebtn";
 const geistSans = Geist({
@@ -31,10 +30,7 @@ export default function RootLayout({ children }) {
     backgroundRepeat: "no-repeat"
   }}
       >
-        <div className="ml-20">
-        <Subscribers />
-        </div>
-        <Navbar/>
+        
 
         <Sidebar />
         {children}

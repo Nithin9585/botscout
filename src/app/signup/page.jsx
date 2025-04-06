@@ -64,7 +64,7 @@ function Register() {
       setPassword('');
       setConfirmPassword('');
 
-      router.push('/Login');
+      router.push('/');
 
     } catch (err) {
       if (err.code === 'auth/email-already-in-use') {
