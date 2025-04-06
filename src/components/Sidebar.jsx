@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { auth } from "../../../firebase/firebase";
+import { auth } from "../../firebase/firebase";
 import { signOut } from "firebase/auth";
 import { Button } from "./ui/button";
 
