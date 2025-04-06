@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar"; 
-import Subribers from "@/components/Subsribebtn";
 
 import { Toaster } from "sonner";
 const geistSans = Geist({
@@ -27,7 +26,6 @@ export default function RootLayout({ children }) {
         style={{ backgroundImage: "url('/background.jpg')" }}
       >
         <div className="ml-20">
-        <Subribers />
         </div>
 
         <Sidebar />
