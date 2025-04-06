@@ -12,7 +12,6 @@ export async function GET() {
     }
     
     const data = await response.json();
-    console.log(data);
     return NextResponse.json(data.slice(0, 10)); // Return top 10 models
 
   } catch (error) {

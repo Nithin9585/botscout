@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 function Arxivpages() {
   const [arxivData, setArxivData] = useState([]);
   const [error, setError] = useState(null);
@@ -38,7 +39,9 @@ function Arxivpages() {
               <p className='p-5 border-2 rounded-lg '>{entry.summary}</p>
               <p className=' m-4'>Published on: {entry.published}</p>
               <Button className='m-4' variant="outline">Download</Button>
-              <Button className='m-4' variant="outline">Download</Button>
+              <Link href='/summary/[entry.id]'>
+              <Button className='m-4' variant="outline">Learn More</Button>
+              </Link>
 
             </div>
           ))}
