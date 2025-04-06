@@ -7,8 +7,10 @@ import img2 from "../../public/Dalle.svg"
 import img3 from "../../public/llama.svg"
 import img4 from "../../public/Mistral.svg"
 import { useEffect, useState } from "react";
+import SearchBar from "@/components/Searchbar";
 export default function huggingfacepages() {
   const [repo, setRepos] = useState([]);
+  const [repoData, setReposData] = useState([]);
   const images = [img1,img2,img3,img4]
   const [loading, setLoading] = useState(true)
 
@@ -17,6 +19,7 @@ export default function huggingfacepages() {
     const data = await res.json();
 
     setRepos(data);
+    setReposData(data);
     setLoading(false)
 
   }, [])
@@ -25,6 +28,7 @@ export default function huggingfacepages() {
 
   return (
     <>
+      <SearchBar repoData={repoData} setReposData={setReposData} setRepos = {setRepos} repo={repo}/>
       {loading && (
       <div className="flex justify-center items-center min-h-[200px]">
       <div className="w-12 h-12 border-4 border-dashed rounded-full animate-spin border-white border-t-transparent"></div>
@@ -49,7 +53,7 @@ export default function huggingfacepages() {
 
       {/* git cards */}
       <main className="flex justify-around w-[90vw] flex-wrap gap-7 md:ml-20">
-        {repo.map((rep) => {
+        {repoData.map((rep) => {
           const random = Math.floor(Math.random() * 4);
           return (
 
