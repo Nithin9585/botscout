@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 function GitHubPages() {
   const [repos, setRepos] = useState([]);
@@ -30,14 +31,9 @@ function GitHubPages() {
       {repos.length > 0 ? (
         <div>
           {repos.map((repo, index) => (
-            <div
-              key={index}
-              className="m-4 border-2 p-4 rounded-lg shadow-md bg-gray-50"
-            >
+            <div key={index} className="m-4 border-2 p-4 rounded-lg shadow-md bg-gray-50">
               <h2 className="text-2xl font-bold mb-2 text-blue-600">
-                <a href={repo.url} target="_blank" rel="noopener noreferrer">
-                  {repo.name}
-                </a>
+                <a href={repo.url} target="_blank" rel="noopener noreferrer">{repo.name}</a>
               </h2>
               <p className="text-gray-700 mb-3">{repo.description}</p>
               <div className="text-sm text-gray-600 mb-2">
@@ -45,14 +41,10 @@ function GitHubPages() {
               </div>
               <div className="flex gap-4 mt-2">
                 <Button variant="outline" asChild>
-                  <a href={repo.readme_url} target="_blank" rel="noopener noreferrer">
-                    View README
-                  </a>
+                  <Link href={`/summary/${repo.id}`}>View MORE</Link>
                 </Button>
                 <Button variant="outline" asChild>
-                  <a href={repo.url} target="_blank" rel="noopener noreferrer">
-                    Visit Repo
-                  </a>
+                  <a href={repo.url} target="_blank" rel="noopener noreferrer">Visit Repo</a>
                 </Button>
               </div>
             </div>
