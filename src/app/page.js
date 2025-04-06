@@ -13,6 +13,11 @@ export default function huggingfacepages() {
       hugging facepages
         </Button>
      </Link>
+     <Link href="/githubpages">
+        <Button className="m-4 cursor-pointer">
+          github pages
+        </Button>
+      </Link> 
  </div>
   );
 }
