@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar"; 
+import Subribers from "@/components/Subsribebtn";
 
 import { Toaster } from "sonner";
 const geistSans = Geist({
@@ -25,6 +26,9 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-cover bg-center bg-no-repeat min-h-screen`}
         style={{ backgroundImage: "url('/background.jpg')" }}
       >
+        <div className="ml-20">
+        <Subribers className=""/>
+        </div>
 
         <Sidebar />
         {children}

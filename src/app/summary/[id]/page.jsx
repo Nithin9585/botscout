@@ -1,16 +1,19 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function SummaryPage() {
   const { id } = useParams();
   const [repo, setRepo] = useState(null);
-  const [summary, setSummary] = useState(null); // parsed JSON object
+  const [summary, setSummary] = useState(null); 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRepoAndSummary = async () => {
       try {
+        // Fetch repositories from API
         const res = await fetch('/api/Githubpages');
         const data = await res.json();
         const selectedRepo = data.find((r) => r.id.toString() === id);
@@ -18,15 +21,16 @@ export default function SummaryPage() {
         if (!selectedRepo) throw new Error('Repo not found');
         setRepo(selectedRepo);
 
+        // AI prompt for repository summary
         const prompt = `
-You are an expert technical writer. Please analyze the following GitHub repository and return a JSON summary with these fields:
+You are an expert technical writer. Analyze the following GitHub repository and return a JSON summary:
 
 {
-  "summary": "A high-level overview of what the repository is about",
-  "features": ["List of key features"],
-  "tech_stack": ["List of major technologies used"],
-  "usage": "How people typically use this project",
-  "benefits": "Why this repo is useful or popular"
+  "summary": "A high-level overview of the repository",
+  "features": ["Key features"],
+  "tech_stack": ["Major technologies used"],
+  "usage": "Typical use case",
+  "benefits": "Why this repository is useful"
 }
 
 Repository details:
@@ -34,7 +38,7 @@ Repository details:
 - Description: ${selectedRepo.description || 'No description'}
 - Language: ${selectedRepo.language || 'Unknown'}
 
-Respond with only valid JSON — no commentary, no markdown. And please give longer response
+Respond with only valid JSON.
         `;
 
         const summaryRes = await fetch('/api/summarize', {
@@ -43,13 +47,10 @@ Respond with only valid JSON — no commentary, no markdown. And please give lon
           body: JSON.stringify({ prompt }),
         });
 
-        
         const summaryData = await summaryRes.json();
 
         try {
-          // Remove markdown code fences like ```json ... ```
-          const cleaned = summaryData.summary.replace(/```json|```/g, '').trim();
-          const parsed = JSON.parse(cleaned);
+          const parsed = JSON.parse(summaryData.summary);
           setSummary(parsed);
         } catch (e) {
           console.error('Failed to parse summary JSON:', e);
@@ -74,8 +75,9 @@ Respond with only valid JSON — no commentary, no markdown. And please give lon
       <h1 className="text-3xl font-bold text-blue-700 mb-2">{repo.name}</h1>
       <p className="text-gray-700 mb-4">{repo.description}</p>
       <p className="text-sm text-gray-500 mb-6">⭐ {repo.stars} | 🧠 {repo.language || 'Unknown'}</p>
+      
+      {/* AI Summary */}
       <h2 className="text-xl font-semibold mb-2">🔍 AI Summary</h2>
-
       {summary ? (
         <div className="bg-gray-100 p-4 rounded-md space-y-3">
           <p><strong>📝 Overview:</strong> {summary.summary}</p>
@@ -87,6 +89,22 @@ Respond with only valid JSON — no commentary, no markdown. And please give lon
       ) : (
         <p className="text-red-500">⚠️ Summary unavailable.</p>
       )}
+
+      {/* GitDiagram Button */}
+      <Link href={`https://gitdiagram.com/${repo.name}`} target="_blank" rel="noopener noreferrer">
+        <Button className="mt-4">Get Flow Diagram</Button>
+      </Link>
+
+      {/* Embed GitDiagram in an iframe */}
+      <div className="mt-6">
+        <h2 className="text-xl font-semibold mb-2">📌 Repository Flow Diagram</h2>
+        <iframe
+          src={`https://gitdiagram.com/${repo.name}`}
+          width="100%"
+          height="500px"
+          className="border rounded-md"
+        ></iframe>
+      </div>
     </div>
   );
 }
