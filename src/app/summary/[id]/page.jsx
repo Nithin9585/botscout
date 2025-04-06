@@ -34,7 +34,7 @@ Repository details:
 - Description: ${selectedRepo.description || 'No description'}
 - Language: ${selectedRepo.language || 'Unknown'}
 
-Respond with only valid JSON — no commentary, no markdown.
+Respond with only valid JSON — no commentary, no markdown. And please give longer response
         `;
 
         const summaryRes = await fetch('/api/summarize', {
@@ -43,10 +43,13 @@ Respond with only valid JSON — no commentary, no markdown.
           body: JSON.stringify({ prompt }),
         });
 
+        
         const summaryData = await summaryRes.json();
 
         try {
-          const parsed = JSON.parse(summaryData.summary);
+          // Remove markdown code fences like ```json ... ```
+          const cleaned = summaryData.summary.replace(/```json|```/g, '').trim();
+          const parsed = JSON.parse(cleaned);
           setSummary(parsed);
         } catch (e) {
           console.error('Failed to parse summary JSON:', e);
@@ -56,7 +59,7 @@ Respond with only valid JSON — no commentary, no markdown.
         console.error(err.message);
         setSummary(null);
       } finally {
-        setLoading(false); // ✅ Make sure loading ends
+        setLoading(false);
       }
     };
 
