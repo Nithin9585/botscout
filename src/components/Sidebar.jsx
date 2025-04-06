@@ -4,6 +4,8 @@ import Link from "next/link";
 import { auth } from "../../firebase/firebase";
 import { signOut } from "firebase/auth";
 import { Button } from "./ui/button";
+import logo from '../../public/mainlogo.svg'
+import Image from "next/image";
 
 function Sidebar() {
   const [user, setUser] = useState(null);
@@ -26,7 +28,7 @@ function Sidebar() {
       <div className=" md:flex h-screen w-20 bg-[#261E35] p-5  fixed left-0 top-0 flex-col">
         <Link href="/">
           <div className="text-xl font-bold text-white mb-6 hover:text-[372C44] transition-colors duration-300">
-        BS
+            <Image src={logo}/>
           </div>
         </Link>
 

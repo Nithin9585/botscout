@@ -1,54 +1,74 @@
-"use client";
-import { useState } from "react";
+'use client'
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Subribers from "@/components/Subsribebtn";
+import Card from "../components/Card"
+import img1 from "../../public/loralogo.svg"
+import img2 from "../../public/Dalle.svg"
+import img3 from "../../public/llama.svg"
+import img4 from "../../public/Mistral.svg"
+import { useEffect, useState } from "react";
+import SearchBar from "@/components/Searchbar";
+export default function huggingfacepages() {
+  const [repo, setRepos] = useState([]);
+  const [repoData, setReposData] = useState([]);
+  const images = [img1,img2,img3,img4]
+  const [loading, setLoading] = useState(true)
 
-export default function HuggingFacePages() {
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  useEffect(async () => {
+    const res = await fetch('/api/Githubpages');
+    const data = await res.json();
 
-  const sendWeeklyEmail = async () => {
-    setLoading(true);
-    setMessage("");
+    setRepos(data);
+    setReposData(data);
+    setLoading(false)
 
-    try {
-      const response = await fetch("/api/sendEmail", { method: "POST" });
-      const data = await response.json();
+  }, [])
 
-      if (data.success) {
-        setMessage("Emails sent successfully!");
-      } else {
-        setMessage("Failed to send emails. Try again.");
-      }
-    } catch (error) {
-      setMessage("Error sending emails.");
-    } finally {
-      setLoading(false);
-    }
-  };
+
 
   return (
-    <div className="ml-100 w-50 h-50 text-black m-25">
-      <input name=""></input>
-      <Link href="/Arxivpages">
-        <Button className="m-4 cursor-pointer">Arxiv Pages</Button>
-      </Link>
-      <Link href="/huggingfacepages">
-        <Button className="m-4 cursor-pointer">Hugging Face Pages</Button>
-      </Link>
-      <Link href="/githubpages">
-        <Button className="m-4 cursor-pointer">GitHub Pages</Button>
-      </Link>
-      
-
-      <Subribers />
-
-      <Button onClick={sendWeeklyEmail} className="m-4 cursor-pointer" disabled={loading}>
-        {loading ? "Sending..." : "Send Weekly Email"}
-      </Button>
-
-      {message && <p className="mt-2 text-green-600">{message}</p>}
+    <>
+      <SearchBar repoData={repoData} setReposData={setReposData} setRepos = {setRepos} repo={repo}/>
+      {loading && (
+      <div className="flex justify-center items-center min-h-[200px]">
+      <div className="w-12 h-12 border-4 border-dashed rounded-full animate-spin border-white border-t-transparent"></div>
     </div>
+    )}
+    <div className=" w-50 h-50 text-black">
+      {/* <Link href="/Arxivpages">
+        <Button className="m-4 cursor-pointer">
+          Arxiv Pages
+        </Button>
+      </Link>    
+      <Link href="/huggingfacepages">
+      <Button className="m-4 cursor-pointer">
+      hugging facepages
+        </Button>
+     </Link>
+     <Link href="/githubpages">
+        <Button className="m-4 cursor-pointer">
+          github pages
+        </Button>
+      </Link> */}
+
+      {/* git cards */}
+      <main className="flex justify-around w-[90vw] flex-wrap gap-7 md:ml-20">
+        {repoData.map((rep) => {
+          const random = Math.floor(Math.random() * 4);
+          return (
+
+            <Card
+            key={rep.id}
+              title={rep.name}
+              imageUrl={images[random]}
+              learnMoreUrl="/githubpages"
+              githubUrl={rep.url}
+            />
+          )
+        })}
+
+      </main>
+ </div>
+    </>
   );
 }

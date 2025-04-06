@@ -3,6 +3,7 @@ import "./globals.css";
 import Sidebar from "@/components/Sidebar"; 
 import Navbar from "@/components/Navbar";
 import { Toaster } from "sonner";
+import Subscribers from "@/components/Subsribebtn";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -23,9 +24,15 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-cover bg-center bg-no-repeat min-h-screen`}
-        style={{ backgroundImage: "url('/background.jpg')" }}
+        style={{
+    backgroundImage: "url('/background.svg')",
+    backgroundAttachment: "fixed",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat"
+  }}
       >
         <div className="ml-20">
+        <Subscribers />
         </div>
         <Navbar/>
 
