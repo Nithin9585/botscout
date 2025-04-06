@@ -24,7 +24,12 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-cover bg-center bg-no-repeat min-h-screen`}
-        style={{ backgroundImage: "url('/background.jpg')" }}
+        style={{
+    backgroundImage: "url('/background.svg')",
+    backgroundAttachment: "fixed",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat"
+  }}
       >
         <div className="ml-20">
         <Subribers />
