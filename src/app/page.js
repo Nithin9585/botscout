@@ -8,20 +8,28 @@ import img3 from "../../public/llama.svg"
 import img4 from "../../public/Mistral.svg"
 import { useEffect, useState } from "react";
 export default function huggingfacepages() {
-  const [repo, setRepos] = useState([])
+  const [repo, setRepos] = useState([]);
+  const images = [img1,img2,img3,img4]
+  const [loading, setLoading] = useState(true)
 
   useEffect(async () => {
     const res = await fetch('/api/Githubpages');
     const data = await res.json();
 
     setRepos(data);
+    setLoading(false)
 
   }, [])
 
-  const images = [img1,img2,img3,img4]
 
 
   return (
+    <>
+      {loading && (
+      <div className="flex justify-center items-center min-h-[200px]">
+      <div className="w-12 h-12 border-4 border-dashed rounded-full animate-spin border-white border-t-transparent"></div>
+    </div>
+    )}
     <div className=" w-50 h-50 text-black">
       {/* <Link href="/Arxivpages">
         <Button className="m-4 cursor-pointer">
@@ -57,5 +65,6 @@ export default function huggingfacepages() {
 
       </main>
  </div>
+    </>
   );
 }

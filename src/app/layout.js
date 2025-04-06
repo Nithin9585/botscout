@@ -3,6 +3,7 @@ import "./globals.css";
 import Sidebar from "@/components/Sidebar"; 
 import Navbar from "@/components/Navbar";
 import { Toaster } from "sonner";
+import Subscribers from "@/components/Subsribebtn";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,7 +32,7 @@ export default function RootLayout({ children }) {
   }}
       >
         <div className="ml-20">
-        <Subribers />
+        <Subscribers />
         </div>
         <Navbar/>
 
