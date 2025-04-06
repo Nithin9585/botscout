@@ -8,7 +8,7 @@ import img3 from "../../public/llama.svg"
 import img4 from "../../public/Mistral.svg"
 import { useEffect, useState } from "react";
 import SearchBar from "@/components/Searchbar";
-export default function huggingfacepages() {
+export default function Huggingfacepages() {
   const [repo, setRepos] = useState([]);
   const [repoData, setReposData] = useState([]);
   const images = [img1,img2,img3,img4]
