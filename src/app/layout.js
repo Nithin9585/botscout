@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
         style={{ backgroundImage: "url('/background.jpg')" }}
       >
         <div className="ml-20">
-        <Subribers className=""/>
+        <Subribers />
         </div>
 
         <Sidebar />
