@@ -30,6 +30,7 @@ export default function HuggingFacePages() {
 
   return (
     <div className="ml-100 w-50 h-50 text-black m-25">
+      <input name=""></input>
       <Link href="/Arxivpages">
         <Button className="m-4 cursor-pointer">Arxiv Pages</Button>
       </Link>
@@ -39,15 +40,14 @@ export default function HuggingFacePages() {
       <Link href="/githubpages">
         <Button className="m-4 cursor-pointer">GitHub Pages</Button>
       </Link>
+      
 
       <Subribers />
 
-      {/* Send Weekly Email Button */}
       <Button onClick={sendWeeklyEmail} className="m-4 cursor-pointer" disabled={loading}>
         {loading ? "Sending..." : "Send Weekly Email"}
       </Button>
 
-      {/* Show Status Message */}
       {message && <p className="mt-2 text-green-600">{message}</p>}
     </div>
   );
