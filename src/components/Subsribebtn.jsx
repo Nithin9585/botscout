@@ -4,33 +4,35 @@ import { Button } from './ui/button';
 import { auth, firestore } from '../../firebase/firebase';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import Link from 'next/link';
+
 function Subscribers() {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null); // Store authenticated user
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (!user) {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      setUser(currentUser);
+      if (!currentUser) {
         setLoading(false);
         return;
       }
 
       const subscribersRef = collection(firestore, 'subscribers');
-      const q = query(subscribersRef, where('email', '==', user.email));
+      const q = query(subscribersRef, where('email', '==', currentUser.email));
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
-        setIsSubscribed(true); 
+        setIsSubscribed(true);
       }
 
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // Properly unsubscribe on unmount
   }, []);
 
   const handleSubscribe = async () => {
-    const user = auth.currentUser;
     if (!user) {
       alert('You must be logged in to subscribe.');
       return;
@@ -55,17 +57,27 @@ function Subscribers() {
 
   return (
     <div>
-      <a href='/signup' className='m-2 text-white p-2 rounded-md bg-blue-400'>
-      Register
-      </a>
-      <a href='/Login' className='m-2 text-white p-2 rounded-md bg-blue-400'>
+      {user ? (
+        <>
+        <Button onClick={handleSubscribe} className="m-2" disabled={isSubscribed}>
+          {isSubscribed ? 'Subscribed' : 'Subscribe'}
+        </Button>
+        
 
-  Login
-      </a>
-
-      <Button onClick={handleSubscribe} className='m-2' disabled={isSubscribed}>
-        {isSubscribed ? 'Subscribed' : 'Subscribe'}
-      </Button>
+        </>
+      ) : (
+        <> <Link href="/signup" className="m-2 text-white p-2 rounded-md bg-blue-400">
+        Register
+      </Link>
+      
+      <Link href="/Login" className="m-2 text-white p-2 rounded-md bg-blue-400">
+        Login
+      </Link>
+      <Button onClick={handleSubscribe} className="m-2  " disabled={isSubscribed}>
+          {isSubscribed ? 'Subscribed' : 'Subscribe'}
+        </Button></>
+        
+      )}
     </div>
   );
 }

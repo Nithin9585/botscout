@@ -8,12 +8,12 @@ function HuggingFacePages() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/huggingface'); // Calls your Next.js API route
+        const response = await fetch('/api/huggingface'); 
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
-        setModels(data); // Store top 10 models
+        setModels(data); 
       } catch (error) {
         setError(error.message);
       }

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import OrbitingRingsLoader from '../loading'; // Ensure this exists
 
 function Arxivpages() {
   const [arxivData, setArxivData] = useState([]);
@@ -34,7 +33,7 @@ function Arxivpages() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <OrbitingRingsLoader /> {/* Your custom loader */}
+        Loading...
       </div>
     );
   }
