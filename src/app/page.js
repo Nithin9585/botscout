@@ -30,10 +30,8 @@ export default function Huggingfacepages() {
         const data = await res.json();
 
         setRepos(data);
+        console.log(data)
         setReposData(data);
-        
-        // Save the fetch timestamp
-        localStorage.setItem("lastFetchTime", Date.now());
       } catch (error) {
         console.error(`Error fetching ${category} data:`, error);
       } finally {
@@ -41,21 +39,7 @@ export default function Huggingfacepages() {
       }
     }
 
-    // Check if a week has passed
-    const lastFetchTime = localStorage.getItem("lastFetchTime");
-    const oneWeek = 7 * 24 * 60 * 60 * 1000; // One week in milliseconds
-
-    if (!lastFetchTime || Date.now() - lastFetchTime > oneWeek) {
-      fetchData(selectedCategory);
-    }
-
-    // Set an interval to auto-fetch every week
-    const intervalId = setInterval(() => {
-      fetchData(selectedCategory);
-    }, oneWeek);
-
-    return () => clearInterval(intervalId); // Cleanup interval on unmount
-
+    fetchData(selectedCategory);
   }, [selectedCategory]); 
 
   return (
@@ -109,19 +93,21 @@ export default function Huggingfacepages() {
       </div>
 
       <main className="flex flex-wrap justify-center gap-6">
-        {repoData.map((rep) => {
-          const random = Math.floor(Math.random() * images.length);
-          return (
-            <Card
-              key={rep.id}
-              title={rep.name || rep.title || rep.modelId || rep.id}
-              imageUrl={images[random]}
-              learnMoreUrl={rep.url || rep.id}
-              githubUrl={rep.url || rep.id}
-            />
-          );
-        })}
-      </main>
+  {repoData.map((rep) => {
+    const random = Math.floor(Math.random() * images.length);
+    return (
+      <Card
+        key={rep.id}
+        title={rep.name || rep.title || rep.modelId || rep.id} // Ensure Hugging Face models display correctly
+        imageUrl={images[random]}
+        learnMoreUrl={rep.url || rep.id} // Use correct links
+        githubUrl={rep.url || rep.id}
+      />
+    );
+  })}
+</main>
+
+
     </div>
   );
 }
