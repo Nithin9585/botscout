@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar"; 
+import SidebarToggle from "@/components/SidebarToggle";
 import { Toaster } from "sonner";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,8 +30,7 @@ export default function RootLayout({ children }) {
   }}
       >
         
-
-        <Sidebar />
+       <SidebarToggle className="bg-purple-300 text-cyan-600 p-5 fixed"/>
         {children}
         <Toaster />
       </body>

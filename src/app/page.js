@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import Card from "../components/Card";
 import img1 from "../../public/loralogo.svg";
@@ -13,41 +14,100 @@ import Navbar from "@/components/Navbar";
 export default function Huggingfacepages() {
   const [repo, setRepos] = useState([]);
   const [repoData, setReposData] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("github"); 
+  const [selectedCategory, setSelectedCategory] = useState("github");
   const [loading, setLoading] = useState(true);
 
   const images = [img1, img2, img3, img4];
+  
+   
+
 
   useEffect(() => {
-    async function fetchData(category) {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    async function fetchStoredData() {
       setLoading(true);
       try {
-        let endpoint = "/api/Githubpages"; 
-        if (category === "huggingface") endpoint = "/api/huggingface";
-        if (category === "arxiv") endpoint = "/api/Arxivpages";
+        const res = await fetch("/api/GetAllData", { signal });
+        if (!res.ok) throw new Error("Failed to fetch stored data");
 
-        const res = await fetch(endpoint);
-        const data = await res.json();
+        const { githubData, huggingfaceData, arxivData } = await res.json();
+        let newData = [];
 
-        setRepos(data);
-        console.log(data)
-        setReposData(data);
+        if (selectedCategory === "github") newData = githubData;
+        else if (selectedCategory === "huggingface") newData = huggingfaceData;
+        else newData = arxivData;
+
+        if (newData.length > 0) {
+          setRepos(newData);
+          setReposData(newData);
+          console.log("Using stored data:", newData);
+        } else {
+          console.log(`No stored data for ${selectedCategory}, fetching fresh data...`);
+          fetchAndStoreData(selectedCategory);
+        }
       } catch (error) {
-        console.error(`Error fetching ${category} data:`, error);
+        console.error("Error fetching stored data:", error);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchData(selectedCategory);
-  }, [selectedCategory]); 
+    fetchStoredData();
+
+    return () => {
+      controller.abort();
+    };
+  }, [selectedCategory]);
+
+  async function fetchAndStoreData(category) {
+    try {
+      let endpoint = "/api/Githubpages";
+      let apiRoute = "/api/addGithubData";
+
+      if (category === "huggingface") {
+        endpoint = "/api/huggingface";
+        apiRoute = "/api/addHuggingFaceData";
+      }
+      if (category === "arxiv") {
+        endpoint = "/api/Arxivpages";
+        apiRoute = "/api/addArxivData";
+      }
+
+      const res = await fetch(endpoint);
+      if (!res.ok) throw new Error(`Failed to fetch ${category} data`);
+
+      const data = await res.json();
+      console.log(`Fetched new ${category} data:`, data);
+
+      await fetch(apiRoute, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data }),
+      });
+
+      console.log(`Updated ${category} data in Firestore`);
+      localStorage.setItem(`${category}_lastFetchTime`, Date.now());
+
+      setRepos(data);
+      setReposData(data);
+    } catch (error) {
+      console.error(`Error fetching ${category} data:`, error);
+    }
+  }
+
+  
+
+  
 
   return (
     <div className="px-4 md:px-10 lg:px-24">
-      <div className="flex flex-col md:flex-row justify-between items-center mt-10 md:mt-20">
-        <Navbar />
-        <Subscribers />
-      </div>
+<div className="flex   md:flex-row justify-between items-center mt-10 md:mt-20">
+ 
+</div>
+
+
 
       <SearchBar repoData={repoData} setReposData={setReposData} setRepos={setRepos} repo={repo} />
 
@@ -58,55 +118,42 @@ export default function Huggingfacepages() {
       )}
 
       <div className="flex flex-wrap justify-center gap-4 my-6">
-        <Button
-          className={`p-2 rounded-md transition duration-300 ${
-            selectedCategory === "github"
-              ? "bg-purple-500 border-2 border-white text-white"
-              : "bg-purple-400 text-white hover:bg-purple-500"
-          }`}
-          onClick={() => setSelectedCategory("github")}
-        >
-          GitHub Models
-        </Button>
-
-        <Button
-          className={`p-2 rounded-md transition duration-300 ${
-            selectedCategory === "huggingface"
-              ? "bg-purple-500 border-2 border-white text-white"
-              : "bg-purple-400 text-white hover:bg-purple-500"
-          }`}
-          onClick={() => setSelectedCategory("huggingface")}
-        >
-          Hugging Face Models
-        </Button>
-
-        <Button
-          className={`p-2 rounded-md transition duration-300 ${
-            selectedCategory === "arxiv"
-              ? "bg-purple-500 border-2 border-white text-white"
-              : "bg-purple-400 text-white hover:bg-purple-500"
-          }`}
-          onClick={() => setSelectedCategory("arxiv")}
-        >
-          ArXiv Models
-        </Button>
+        {["github", "huggingface", "arxiv"].map((category) => (
+          <Button
+            key={category}
+            className={`p-2 rounded-md transition duration-300 ${
+              selectedCategory === category
+                ? "bg-purple-500 border-2 border-white text-white"
+                : "bg-purple-400 text-white hover:bg-purple-500"
+            }`}
+            onClick={() => {
+              setSelectedCategory(category);
+            }}
+          >
+            {category === "github" ? "GitHub Models" : category === "huggingface" ? "Hugging Face Models" : "ArXiv Models"}
+          </Button>
+        ))}
       </div>
 
       <main className="flex flex-wrap justify-center gap-6">
-  {repoData.map((rep) => {
-    const random = Math.floor(Math.random() * images.length);
+  {repoData.map((rep, index) => {
+    const image = images[index % images.length];
+
+    let repoId = rep.name || rep.title || rep.modelId || `Unknown-${index}`;
+    let repoUrl =
+      rep.url || rep.link || (selectedCategory === "huggingface" ? `https://huggingface.co/${rep.modelId}` : "#") || selectedCategory === "arxiv" ? `https://arxiv.org/abs/${rep.id}` : "#";
+
     return (
       <Card
-        key={rep.id}
-        title={rep.name || rep.title || rep.modelId || rep.id} // Ensure Hugging Face models display correctly
-        imageUrl={images[random]}
-        learnMoreUrl={rep.url || rep.id} // Use correct links
-        githubUrl={rep.url || rep.id}
+        key={`${selectedCategory}-${repoId}`}
+        title={repoId}
+        imageUrl={image}
+        learnMoreUrl={`/githubpages`}
+        githubUrl={repoUrl}
       />
     );
   })}
 </main>
-
 
     </div>
   );

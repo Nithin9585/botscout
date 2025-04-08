@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import logo from '../../public/mainlogo.svg'
 import Image from "next/image";
 import { FaGithub } from 'react-icons/fa';
+import Subscribers from "./Subsribebtn";
 function Sidebar() {
   const [user, setUser] = useState(null);
 
@@ -74,10 +75,15 @@ function Sidebar() {
                 </Button>
               </Link>
               {!user ? (
-                        <></>
+                        <>
+                                    <Subscribers className='flex-col'/>
+
+                        
+                        </>
 
           ) : (
             <>
+            <Subscribers className='flex-col'/>
               <button
                 onClick={handleLogout}
                 className="hover:text-[#372C44] transition-colors duration-300 cursor-pointer"

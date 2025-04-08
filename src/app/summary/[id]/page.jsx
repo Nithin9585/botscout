@@ -12,7 +12,6 @@ export default function SummaryPage() {
   useEffect(() => {
     const fetchRepoAndSummary = async () => {
       try {
-        // Get all repos from API
         const res = await fetch('/api/Githubpages');
         const data = await res.json();
         const selectedRepo = data.find((r) => r.id.toString() === id);
@@ -23,10 +22,8 @@ export default function SummaryPage() {
 
         setRepo(selectedRepo);
 
-        // Prepare prompt for DeepSeek
         const prompt = `Give a short summary for this GitHub repository:\nName: ${selectedRepo.name}\nDescription: ${selectedRepo.description || 'No description'}\nLanguage: ${selectedRepo.language} dont add formatting`;
 
-        // Call your custom /api/summarize route
         const summaryRes = await fetch('/api/summarize', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
